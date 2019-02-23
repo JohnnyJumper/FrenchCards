@@ -5,7 +5,7 @@ import styles from '../styles';
 
 const Card = ({color, text}) => (
 	<View style={{...styles.cardView, backgroundColor:color}}>
-		<Text>{text}</Text>
+		<Text style={styles.cardText}>{text}</Text>
 	</View>
 );
 

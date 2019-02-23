@@ -38,7 +38,12 @@ module.exports = StyleSheet.create({
 		height: '90%',
 		position: 'absolute',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		borderRadius: 20,
+	},
+
+	cardText: {
+		fontSize: 85
 	},
 
 	animatedContainer: {
@@ -48,6 +53,12 @@ module.exports = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		position: 'absolute',
-
-	}	
+	},
+	left: {
+		borderWidth: 1,
+		padding: 10,
+		justifyContent: 'center',
+		borderColor: 'green',
+		fontSize: 50
+	}
 });
