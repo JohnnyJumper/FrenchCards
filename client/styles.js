@@ -20,9 +20,17 @@ module.exports = StyleSheet.create({
 		height: topBar.height,
 		width: topBar.width,
 		margin: topBar.margin,
+		marginTop: 20,
 		backgroundColor: 'whitesmoke',
 		justifyContent: 'center',
 		alignItems: 'center'
+	},
+
+	topBarText: {
+		textAlign: 'center',
+		width: '100%',
+		fontSize: 35,
+		fontWeight: '800'
 	},
 
 	cardPlaceholder: {
@@ -34,8 +42,8 @@ module.exports = StyleSheet.create({
 	},
 
 	cardView: {
-		width: '90%',
-		height: '90%',
+		width: '100%',
+		height: '100%',
 		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -46,6 +54,14 @@ module.exports = StyleSheet.create({
 		fontSize: 85
 	},
 
+	cardLeftText: {
+		position: 'absolute',
+		top: 50,
+		left: 40,
+		zIndex: 1000
+	},
+
+
 	animatedContainer: {
 		height: 500,
 		width: window.width,
@@ -55,10 +71,8 @@ module.exports = StyleSheet.create({
 		position: 'absolute',
 	},
 	left: {
-		borderWidth: 1,
 		padding: 10,
 		justifyContent: 'center',
-		borderColor: 'green',
 		fontSize: 50
 	}
 });

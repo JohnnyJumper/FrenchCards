@@ -38,19 +38,15 @@ router.get('/cards/:amount', (req, res) => {
 });
 
 router.post('/update/:id', (req, res) => {
-	console.log('FUCK');
 	const {id} = req.params;
 	const {isCorrect} = req.body;
-// if (!id) return res.json({success: false, err: "wrong id", data: {id, ...req.body}});
+if (!id) return res.json({success: false, err: "wrong id", data: {id, ...req.body}});
 	FrenchCard.findById(id, (err, doc) => {
-		// if (err) return res.json({success: false, err, data: {id, ...req.body}});
+		if (err) return res.json({success: false, err, data: {id, ...req.body}});
 		if (isCorrect) doc.answeredCorrectly += 1; else doc.answeredIncorrectly += 1;
-		console.log('well all good!');
-		console.log(isCorrect)
 		doc.save(err => {
-			// if (err) return res.json({success: false, err, data: {id, ...req.body}});
-			console.log('should return true');
-			// return res.json({success: true, data: doc});
+			if (err) return res.json({success: false, err, data: {id, ...req.body}});
+			return res.json({success: true, data: doc});
 		});
 	});
 })

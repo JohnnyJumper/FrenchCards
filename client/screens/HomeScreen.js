@@ -1,24 +1,12 @@
 import React from 'react';
 import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   Animated,
   PanResponder,
 } from 'react-native';
-import { WebBrowser } from 'expo';
 import styles from '../styles';
-import { MonoText } from '../components/StyledText';
 import Card from '../components/Card';
-
-const data = [
-  'card', 'second', 'third', 'forth'
-];
-
 import dimensions from '../constants/Layout';
 const axios = require('axios');
 const {window} = dimensions;
@@ -104,14 +92,14 @@ export default class HomeScreen extends React.Component {
       },
       onPanResponderRelease: (event, gestureState) => {
         if (gestureState.dx > 120) {
-          Animated.spring(this.position, {
+          Animated.timing(this.position, {
             toValue: {x: window.width + 10, y: 0},
-            speed: 50,
+            duration: 200
           }).start(async () => await this.moveToNextCard('right'));
         } else if (gestureState.dx < -120) {
-          Animated.spring(this.position, {
+          Animated.timing(this.position, {
             toValue: {x: -window.width - 10, y: 0},
-            speed: 50,
+            duration: 200
           }).start(async () => await this.moveToNextCard('left'));
         } else {
           Animated.spring(this.position, {
@@ -122,7 +110,7 @@ export default class HomeScreen extends React.Component {
       }
     });
 
-    const response = await axios.get('http://10.114.8.12:6357/api/cards/3');
+    const response = await axios.get('http://10.114.8.12:6357/api/cards/8');
    
     if (response.data.success) {
       const cardWithTexts =  response.data.data.map(card => {
@@ -144,26 +132,33 @@ export default class HomeScreen extends React.Component {
 
 
 
-  moveToNextCard(direction) {
+ async moveToNextCard(direction) {
     const card = this.state.cards[this.state.currentIndex];
-    console.log('currentIndex = ', this.state.currentIndex);
     if (this.state.currentIndex == this.state.cards.length - 1) this.updateCards();
     switch(direction) {
       case 'left': {
         if (this.checkAnswer(card.left)) {
-            axios.post(`http://10.114.8.12:6357/api/update/${card._id}`, {isCorrect: true});
+          const response = await axios.post(`http://10.114.8.12:6357/api/update/${card._id}`, {isCorrect: true})
+          .catch(err => console.error(err));
+          if (response.data.success)
            return this.setState(prevState => ({currentIndex: prevState.currentIndex + 1, score: prevState.score + 1}), () => {this.position.setValue({x: 0, y: 0})})
         } else {
-           axios.post(`http://10.114.8.12:6357/api/update/${card._id}`, {isCorrect: false});
+           const response = await axios.post(`http://10.114.8.12:6357/api/update/${card._id}`, {isCorrect: false})
+           .catch(err => console.error(err));
+          if (response.data.success)
            return this.setState(prevState => ({currentIndex: prevState.currentIndex + 1, score: 0}), () => {this.position.setValue({x: 0, y: 0})})
         }
       }
       case 'right': {
         if (this.checkAnswer(card.right)) {
-           axios.post(`http://10.114.8.12:6357/api/update/${card._id}`, {isCorrect: true});
+           const response = await axios.post(`http://10.114.8.12:6357/api/update/${card._id}`, {isCorrect: true})
+           .catch(err => console.error(err));
+          if (response.data.success)
            return this.setState(prevState => ({currentIndex: prevState.currentIndex + 1, score: prevState.score + 1}), () => {this.position.setValue({x: 0, y: 0})})
         } else {
-          axios.post(`http://10.114.8.12:6357/api/update/${card._id}`, {isCorrect: false});
+          const response = await axios.post(`http://10.114.8.12:6357/api/update/${card._id}`, {isCorrect: false})
+           .catch(err => console.error(err));
+          if (response.data.success)
            return this.setState(prevState => ({currentIndex: prevState.currentIndex + 1, score: 0}), () => {this.position.setValue({x: 0, y: 0})})
         }
       }
@@ -171,11 +166,9 @@ export default class HomeScreen extends React.Component {
   }
 
   async updateCards() {
-    console.log('trying to update');
     const {currentIndex, cards} = this.state;
     if (currentIndex !== cards.length - 1) return null
-    const response = await axios.get('http://10.114.8.12:6357/api/cards/16');
-    // console.log('response = ', response);
+    const response = await axios.get('http://10.114.8.12:6357/api/cards/8');
     if (response.data.success) {
       const cardWithTexts =  response.data.data.map(card => {
         const random = Math.floor(Math.random() * Math.floor(2));
@@ -193,6 +186,8 @@ export default class HomeScreen extends React.Component {
     const {currentIndex, cards} = this.state;
     const currentColor = this.colors[this.currentColor];
     const nextColor = this.getNextColor();
+    if (cards.length == 0)
+      return (<View><Text>Loading</Text></View>);
     return cards.map((card, index) => {
       if (index <  currentIndex) {return null;}
       else if (index == currentIndex) { 
@@ -223,7 +218,7 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={styles.homeStyle}>
         <View style={styles.topBar}>
-          <Text>{this.state.score} in a row!</Text>
+          <Text style={styles.topBarText}>{this.state.score} in a row!</Text>
         </View>
         <View style={styles.cardPlaceholder}>
         {this.renderCards()}        

@@ -18,8 +18,8 @@ HomeStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-arrow-round-forward${focused ? '' : '-outline'}`
+          : 'md-arrow-round-forward'
       }
     />
   ),
